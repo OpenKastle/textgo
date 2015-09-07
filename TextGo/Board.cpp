@@ -10,13 +10,17 @@ bool operator<(const Position& left, const Position& right)
     return std::make_tuple(left.GetY(), left.GetX()) < std::make_tuple(right.GetY(), right.GetX());
 }
 
-bool Board::Place(Position position, Stone stone)
+bool Board::Add(Position position, Stone stone, bool recordLast)
 {
     auto find = m_stones.find(position);
     if (find == end(m_stones))
     {
         m_stones[position] = stone;
-        m_lastPlace = position;
+
+        if (recordLast)
+        {
+            m_lastPosition = position;
+        }
 
         return true;
     }
@@ -26,11 +30,16 @@ bool Board::Place(Position position, Stone stone)
     }
 }
 
+void Board::Remove(Position position)
+{
+    m_stones.erase(position);
+}
+
 void Board::Print() const
 {
     std::string board =
 
-        "    a   b   c   d   e   f   g   h   j   k   l   m   n   o   p   q   r   s   t    "   "\n"
+        "    A   B   C   D   E   F   G   H   J   K   L   M   N   O   P   Q   R   S   T    "   "\n"
         "19  .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .  19"   "\n"
         "                                                                                 "   "\n"
         "18  .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .  18"   "\n"
@@ -69,7 +78,7 @@ void Board::Print() const
         "                                                                                 "   "\n"
         " 1  .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   1"   "\n"
         "                                                                                 "   "\n"
-        "    a   b   c   d   e   f   g   h   j   k   l   m   n   o   p   q   r   s   t    "   "\n";
+        "    A   B   C   D   E   F   G   H   J   K   L   M   N   O   P   Q   R   S   T    "   "\n";
 
     auto GetStoneStringPosition = [](Position position) -> unsigned int
         {
@@ -78,12 +87,12 @@ void Board::Print() const
 
     for (const auto& stonePosition : m_stones)
     {
-        board.replace(GetStoneStringPosition(stonePosition.first) - 1, 3, "(0)");
+        board.replace(GetStoneStringPosition(stonePosition.first) - 1, 3, "(O)");
     }
 
     if (!m_stones.empty())
     {
-        auto find = m_stones.find(m_lastPlace);
+        auto find = m_stones.find(m_lastPosition);
         if (find != end(m_stones))
         {
             board.replace(GetStoneStringPosition(find->first), 1, "^");
@@ -152,4 +161,9 @@ Stone Board::GetStoneAt(Position position) const
     {
         return Stone::None;
     }
+}
+
+void Board::SetLastPosition(Position position)
+{
+    m_lastPosition = position;
 }

@@ -8,11 +8,16 @@ public:
     Board() = default;
     ~Board() = default;
 
-    bool Place(Position position, Stone stone);
+    bool Add(Position position, Stone stone, bool recordLast);
+    void Remove(Position position);
     void Print() const;
+
     Stone GetStoneAt(Position position) const;
+
+    Position GetLastPosition() const { return m_lastPosition; }
+    void SetLastPosition(Position position);
 
 private:
     std::map<Position, Stone> m_stones;
-    Position m_lastPlace;
+    Position m_lastPosition;
 };

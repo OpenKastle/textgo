@@ -1,6 +1,7 @@
 #include "Position.h"
 
 #include <sstream>
+#include <cctype>
 
 Position::Position(unsigned int x, unsigned int y)
     : m_x(x),
@@ -16,7 +17,19 @@ Position::Position(const std::string& positionString)
     }
 
     char letter = positionString[0];
-    if (letter < 'a' || letter > 't' || letter == 'i')
+    if (!std::isalpha(letter))
+    {
+        return;
+    }
+
+    letter = std::toupper(letter);
+
+    if (letter == 'I')
+    {
+        return;
+    }
+
+    if (letter > 'T')
     {
         return;
     }
@@ -36,7 +49,7 @@ Position::Position(const std::string& positionString)
         return;
     }
 
-    unsigned int position = letter - 'a';
+    unsigned int position = letter - 'A';
     if (position > 8)
         --position;
 
@@ -58,12 +71,12 @@ bool Position::Valid() const
 
 std::string Position::ToString() const
 {
-    char letter = m_x + 'a';
-    if (letter >= 'i')
+    char letter = m_x + 'A';
+    if (letter >= 'I')
         ++letter;
 
     std::ostringstream oss;
-    oss << static_cast<char>(m_x + 'a') << ((18 - m_y) + 1);
+    oss << static_cast<char>(m_x + 'A') << ((18 - m_y) + 1);
 
     return oss.str();
 }
