@@ -2,10 +2,18 @@
 
 #include "Position.h"
 
+#include "ColorSchemes.h"
+
+#include <memory>
+#include <map>
+
 class Board
 {
 public:
-    Board() = default;
+    Board();
+    Board(std::unique_ptr<ColorScheme> colorScheme);
+    Board(const Board& other);
+    Board& operator=(const Board& other);
     ~Board() = default;
 
     bool Add(Position position, Stone stone, bool recordLast);
@@ -18,6 +26,11 @@ public:
     void SetLastPosition(Position position);
 
 private:
+    unsigned int GetStoneStringPosition(Position position) const;
+    std::map<unsigned int, WORD> GetBoardTextSections() const;
+
     std::map<Position, Stone> m_stones;
     Position m_lastPosition;
+
+    std::unique_ptr<ColorScheme> m_colorScheme;
 };

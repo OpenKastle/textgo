@@ -10,6 +10,32 @@ bool operator<(const Position& left, const Position& right)
     return std::make_tuple(left.GetY(), left.GetX()) < std::make_tuple(right.GetY(), right.GetX());
 }
 
+Board::Board()
+    : m_colorScheme(std::make_unique<RealisticColorScheme>())
+{
+}
+
+Board::Board(std::unique_ptr<ColorScheme> colorScheme)
+    : m_colorScheme(std::move(colorScheme))
+{
+}
+
+Board::Board(const Board& other)
+    : m_stones(other.m_stones),
+      m_lastPosition(other.m_lastPosition),
+      m_colorScheme(other.m_colorScheme->Clone())
+{
+}
+
+Board& Board::operator=(const Board& other)
+{
+    m_stones = other.m_stones;
+    m_lastPosition = other.m_lastPosition;
+    m_colorScheme = other.m_colorScheme->Clone();
+
+    return *this;
+}
+
 bool Board::Add(Position position, Stone stone, bool recordLast)
 {
     auto find = m_stones.find(position);
@@ -80,11 +106,6 @@ void Board::Print() const
         "                                                                                 "   "\n"
         "    A   B   C   D   E   F   G   H   J   K   L   M   N   O   P   Q   R   S   T    "   "\n";
 
-    auto GetStoneStringPosition = [](Position position) -> unsigned int
-        {
-            return ((position.GetY() * 82 * 2) + 82) + ((position.GetX() * 4) + 4);
-        };
-
     for (const auto& stonePosition : m_stones)
     {
         board.replace(GetStoneStringPosition(stonePosition.first) - 1, 3, "(O)");
@@ -99,16 +120,59 @@ void Board::Print() const
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    // New color logic here
-    std::cout << board;
+    std::map<unsigned int, WORD> sections = GetBoardTextSections();
+    for (auto iter = begin(sections); iter != end(sections); ++iter)
+    {
+        auto nextIter = iter;
+        ++nextIter;
 
-    //////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////
+        SetConsoleTextAttribute(hConsole, iter->second);
+        if (nextIter != end(sections))
+        {
+            std::cout << board.substr(iter->first, nextIter->first - iter->first);
+        }
+        else
+        {
+            std::cout << board.substr(iter->first);
+        }
+    }
+}
+
+unsigned int Board::GetStoneStringPosition(Position position) const
+{
+    return ((position.GetY() * 82 * 2) + 82) + ((position.GetX() * 4) + 4);
+}
+
+std::map<unsigned int, WORD> Board::GetBoardTextSections() const
+{
+    std::map<unsigned int, WORD> sections;
+
+    sections[0] = m_colorScheme->GetBoardLabelAttributes();
+
+    for (unsigned int i = 0; i < 38; ++i)
+    {
+        sections[82 + (i * 82) +  3] = m_colorScheme->GetBoardAttributes();
+        sections[82 + (i * 82) + 78] = m_colorScheme->GetBoardLabelAttributes();
+    }
+
+    for (const auto& stonePosition : m_stones)
+    {
+        unsigned int stoneTextPosition = GetStoneStringPosition(stonePosition.first);
+
+        sections[stoneTextPosition - 1]
+            = (stonePosition.second == Stone::Black)
+                ? m_colorScheme->GetBlackStoneAttributes()
+                : m_colorScheme->GetWhiteStoneAttributes();
+
+        if (stonePosition.first.GetX() != 18)
+        {
+            sections[stoneTextPosition + 2] = m_colorScheme->GetBoardAttributes();
+        }
+    }
+
+    return sections;
 }
 
 Stone Board::GetStoneAt(Position position) const

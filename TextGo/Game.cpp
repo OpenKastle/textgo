@@ -5,10 +5,12 @@
 #include <Windows.h>
 
 Game::Game()
+    : m_board(std::make_unique<RealisticColorScheme>())
 {
 }
 
 Game::Game(Handicap handicap)
+    : Game()
 {
     if (handicap == Handicap::Two)
     {
