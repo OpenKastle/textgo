@@ -99,55 +99,16 @@ void Board::Print() const
         }
     }
 
-    std::vector<std::string> boardSections;
-    std::vector<std::tuple<std::string, Stone>> stoneSections;
+    //////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
 
-    if (!m_stones.empty())
-    {
-        unsigned int currentPosition = 0;
-        for (const auto& stonePosition : m_stones)
-        {
-            unsigned int stoneStringPosition = GetStoneStringPosition(stonePosition.first);
-            
-            std::string boardSection = board.substr(currentPosition, (stoneStringPosition - 1) - currentPosition);
-            std::string stoneSection = board.substr(stoneStringPosition - 1, 3);
+    // New color logic here
+    std::cout << board;
 
-            boardSections.push_back(boardSection);
-            stoneSections.push_back(std::make_tuple(stoneSection, stonePosition.second));
-
-            currentPosition = stoneStringPosition + 2;
-        }
-
-        if (!board.empty())
-        {
-            boardSections.push_back(board.substr(currentPosition));
-        }
-    }
-    else
-    {
-        boardSections.push_back(board);
-    }
-
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    for (int i = 0, j = 0; i < boardSections.size() || j < stoneSections.size(); ++i, ++j)
-    {
-        SetConsoleTextAttribute(hConsole, 8);
-        std::cout << boardSections[i];
-
-        if (j < stoneSections.size())
-        {
-            if (std::get<1>(stoneSections[j]) == Stone::Black)
-            {
-                SetConsoleTextAttribute(hConsole, 9);
-            }
-            else
-            {
-                SetConsoleTextAttribute(hConsole, 15);
-            }
-
-            std::cout << std::get<0>(stoneSections[j]);
-        }
-    }
+    //////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
 }
 
 Stone Board::GetStoneAt(Position position) const
