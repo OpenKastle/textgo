@@ -5,11 +5,6 @@
 #include <vector>
 #include <windows.h>
 
-bool operator<(const Position& left, const Position& right)
-{
-    return std::make_tuple(left.GetY(), left.GetX()) < std::make_tuple(right.GetY(), right.GetX());
-}
-
 Board::Board()
     : m_colorScheme(std::make_unique<RealisticColorScheme>())
 {

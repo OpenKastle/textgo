@@ -3,6 +3,17 @@
 #include <sstream>
 #include <cctype>
 
+bool operator<(const Position& left, const Position& right)
+{
+    return std::make_tuple(left.GetY(), left.GetX()) < std::make_tuple(right.GetY(), right.GetX());
+}
+
+bool operator==(const Position& a, const Position& b)
+{
+    return a.GetX() == b.GetX() &&
+           a.GetY() == b.GetY();
+}
+
 Position::Position(unsigned int x, unsigned int y)
     : m_x(x),
       m_y(y)

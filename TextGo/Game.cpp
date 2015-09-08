@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include "GoUtility.h"
+
 #include <iostream>
 #include <string>
 #include <Windows.h>
@@ -109,7 +111,7 @@ void Game::Start()
             std::string input;
             std::cin >> input;
 
-            if (input == "undo")
+            if (input == "undo" || input == "u")
             {
                 if (m_historyIndex > 0)
                 {
@@ -117,7 +119,7 @@ void Game::Start()
                     m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
                 }
             }
-            else if (input == "redo")
+            else if (input == "redo" || input == "r")
             {
                 if (m_historyIndex != m_history.size())
                 {
@@ -125,7 +127,7 @@ void Game::Start()
                     m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
                 }
             }
-            else if (input == "quit")
+            else if (input == "quit" || input == "q")
             {
                 system("cls");
                 exit(0);
@@ -140,20 +142,30 @@ void Game::Start()
                 
                     Board boardCopy = m_board;
                 
-                    // TODO: Add additional failure conditions (ko, suicide)
+                    // TODO: Add ko condition
                     if (boardCopy.Add(Position(position), stone, true))
                     {
-                        valid = true;
-                        m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
+                        bool suicide = false;
+                        if (GetGroupLiberties(boardCopy, position) == 0)
+                        {
+                            // TODO: Implement capture mechanic which makes a potential suicide valid
+                            suicide = true;
+                        }
 
-                        m_board = boardCopy;
+                        if (!suicide)
+                        {
+                            valid = true;
+                            m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
+
+                            m_board = boardCopy;
                     
-                        auto iter = begin(m_history);
-                        std::advance(iter, m_historyIndex);
-                        m_history.erase(iter, end(m_history));
+                            auto iter = begin(m_history);
+                            std::advance(iter, m_historyIndex);
+                            m_history.erase(iter, end(m_history));
 
-                        m_history.push_back(std::make_unique<AddAction>(position, stone, previousLastPosition));
-                        ++m_historyIndex;
+                            m_history.push_back(std::make_unique<AddAction>(position, stone, previousLastPosition));
+                            ++m_historyIndex;
+                        }
                     }
                 }
             }

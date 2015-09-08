@@ -68,6 +68,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="ColorSchemes.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GoUtility.h" />
     <ClInclude Include="Position.h" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +76,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="ColorSchemes.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GoUtility.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Position.cpp" />
   </ItemGroup>

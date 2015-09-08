@@ -29,3 +29,6 @@ private:
     unsigned int m_x = 99;
     unsigned int m_y = 99;
 };
+
+bool operator<(const Position& left, const Position& right);
+bool operator==(const Position& a, const Position& b);
