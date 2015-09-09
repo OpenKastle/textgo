@@ -146,8 +146,7 @@ void Game::Start()
                     Position previousLastPosition = m_board.GetLastPosition();
                 
                     Board boardCopy = m_board;
-                
-                    // TODO: Add ko condition
+
                     if (boardCopy.Add(Position(position), stone, true))
                     {
                         auto historyAction = std::make_unique<CompositeAction>();
@@ -169,14 +168,30 @@ void Game::Start()
                             }
                         }
 
+                        bool ko = false;
+
                         if (GetGroupLiberties(boardCopy, position) != 0)
                         {
-                            valid = true;
-                            m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
+                            Board boardKoCopy = boardCopy;
+                            if (m_history.size() >= 2)
+                            {
+                                m_history[m_history.size() - 1]->Revert(boardKoCopy);
 
-                            m_board = boardCopy;
+                                if (boardKoCopy == boardCopy)
+                                {
+                                    ko = true;
+                                }
+                            }
+
+                            if (!ko)
+                            {
+                                valid = true;
+                                m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
+
+                                m_board = boardCopy;
                     
-                            AddHistory(std::move(historyAction));
+                                AddHistory(std::move(historyAction));
+                            }
                         }
                     }
                 }

@@ -187,3 +187,8 @@ void Board::SetLastPosition(Position position)
 {
     m_lastPosition = position;
 }
+
+bool Board::operator==(const Board& other) const
+{
+    return m_stones == other.m_stones;
+}

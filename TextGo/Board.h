@@ -25,6 +25,8 @@ public:
     Position GetLastPosition() const { return m_lastPosition; }
     void SetLastPosition(Position position);
 
+    bool operator==(const Board& other) const;
+
 private:
     unsigned int GetStoneStringPosition(Position position) const;
     std::map<unsigned int, WORD> GetBoardTextSections() const;
