@@ -3,6 +3,7 @@
 #include "Position.h"
 
 #include <vector>
+#include <memory>
 
 class Board;
 
@@ -20,11 +21,13 @@ class CompositeAction : public AbstractAction
 public:
     virtual ~CompositeAction() {}
 
+    void AddAction(std::unique_ptr<AbstractAction> action);
+
     virtual void Apply(Board& board) override;
     virtual void Revert(Board& board) override;
 
 private:
-    std::vector<AbstractAction> m_actions;
+    std::vector<std::unique_ptr<AbstractAction>> m_actions;
 };
 
 class AddAction : public AbstractAction
@@ -57,4 +60,15 @@ public:
 private:
     Position m_position;
     Stone m_stone = Stone::Black;
+};
+
+class PassAction : public AbstractAction
+{
+public:
+    virtual ~PassAction() {}
+
+    PassAction() = default;
+
+    virtual void Apply(Board&) override {}
+    virtual void Revert(Board&) override {}
 };

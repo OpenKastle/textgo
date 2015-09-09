@@ -30,6 +30,8 @@ public:
     void Start();
 
 private:
+    void AddHistory(std::unique_ptr<AbstractAction> action);
+
     Board m_board;
     Stone m_turn = Stone::Black;
 

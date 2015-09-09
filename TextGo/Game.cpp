@@ -111,7 +111,12 @@ void Game::Start()
             std::string input;
             std::cin >> input;
 
-            if (input == "undo" || input == "u")
+            if (input == "pass" || input == "p")
+            {
+                AddHistory(std::make_unique<PassAction>());
+                m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
+            }
+            else if (input == "undo" || input == "u")
             {
                 if (m_historyIndex > 0)
                 {
@@ -145,30 +150,47 @@ void Game::Start()
                     // TODO: Add ko condition
                     if (boardCopy.Add(Position(position), stone, true))
                     {
-                        bool suicide = false;
-                        if (GetGroupLiberties(boardCopy, position) == 0)
+                        auto historyAction = std::make_unique<CompositeAction>();
+                        historyAction->AddAction(std::make_unique<AddAction>(position, stone, previousLastPosition));
+
+                        Stone oppositeStone = (stone == Stone::Black) ? Stone::White : Stone::Black;
+                        std::vector<Position> adjacentOpponents = GetAdjacentSpaces(boardCopy, position, oppositeStone);
+
+                        for (const Position& adjacentOpponentPosition : adjacentOpponents)
                         {
-                            // TODO: Implement capture mechanic which makes a potential suicide valid
-                            suicide = true;
+                            if (GetGroupLiberties(boardCopy, adjacentOpponentPosition) == 0)
+                            {
+                                std::vector<Position> group = GetGroup(boardCopy, adjacentOpponentPosition);
+                                for (const Position& groupPosition : group)
+                                {
+                                    historyAction->AddAction(std::make_unique<RemoveAction>(groupPosition, boardCopy.GetStoneAt(groupPosition)));
+                                    boardCopy.Remove(groupPosition);
+                                }
+                            }
                         }
 
-                        if (!suicide)
+                        if (GetGroupLiberties(boardCopy, position) != 0)
                         {
                             valid = true;
                             m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
 
                             m_board = boardCopy;
                     
-                            auto iter = begin(m_history);
-                            std::advance(iter, m_historyIndex);
-                            m_history.erase(iter, end(m_history));
-
-                            m_history.push_back(std::make_unique<AddAction>(position, stone, previousLastPosition));
-                            ++m_historyIndex;
+                            AddHistory(std::move(historyAction));
                         }
                     }
                 }
             }
         }
     }
+}
+
+void Game::AddHistory(std::unique_ptr<AbstractAction> action)
+{
+    auto iter = begin(m_history);
+    std::advance(iter, m_historyIndex);
+    m_history.erase(iter, end(m_history));
+
+    m_history.push_back(std::move(action));
+    ++m_historyIndex;
 }

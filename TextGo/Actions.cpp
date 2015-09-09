@@ -2,19 +2,24 @@
 
 #include "Board.h"
 
+void CompositeAction::AddAction(std::unique_ptr<AbstractAction> action)
+{
+    m_actions.push_back(std::move(action));
+}
+
 void CompositeAction::Apply(Board& board)
 {
-    for (AbstractAction& action : m_actions)
+    for (std::unique_ptr<AbstractAction>& action : m_actions)
     {
-        action.Apply(board);
+        action->Apply(board);
     }
 }
 
 void CompositeAction::Revert(Board& board)
 {
-    for (AbstractAction& action : m_actions)
+    for (std::unique_ptr<AbstractAction>& action : m_actions)
     {
-        action.Revert(board);
+        action->Revert(board);
     }
 }
 

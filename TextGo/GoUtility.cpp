@@ -70,7 +70,7 @@ std::vector<Position> GetGroup(Board board, Position position)
         group.push_back(current);
         search.erase(begin(search));
 
-        std::vector<Position> adjacentStones = GetAdjacentSpaces(board, position, color);
+        std::vector<Position> adjacentStones = GetAdjacentSpaces(board, current, color);
         for (auto& adjacentStone : adjacentStones)
         {
             if (std::find(begin(group), end(group), adjacentStone) == end(group) &&
