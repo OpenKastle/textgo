@@ -62,6 +62,21 @@ private:
     Stone m_stone = Stone::Black;
 };
 
+class LastStoneChange : public AbstractAction
+{
+public:
+    virtual ~LastStoneChange() {}
+
+    LastStoneChange(Position oldPosition, Position newPosition);
+
+    virtual void Apply(Board& board) override;
+    virtual void Revert(Board& board) override;
+
+private:
+    Position m_oldPosition;
+    Position m_newPosition;
+};
+
 class PassAction : public AbstractAction
 {
 public:

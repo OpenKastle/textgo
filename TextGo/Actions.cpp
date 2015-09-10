@@ -33,13 +33,11 @@ AddAction::AddAction(Position position, Stone stone, Position previousLastPositi
 void AddAction::Apply(Board& board)
 {
     board.Add(m_position, m_stone, true);
-    board.SetLastPosition(m_position);
 }
 
 void AddAction::Revert(Board& board)
 {
     board.Remove(m_position);
-    board.SetLastPosition(m_previousLastPosition);
 }
 
 RemoveAction::RemoveAction(Position position, Stone stone)
@@ -56,4 +54,20 @@ void RemoveAction::Apply(Board& board)
 void RemoveAction::Revert(Board& board)
 {
     board.Add(m_position, m_stone, false);
+}
+
+LastStoneChange::LastStoneChange(Position oldPosition, Position newPosition)
+    : m_oldPosition(oldPosition),
+      m_newPosition(newPosition)
+{
+}
+
+void LastStoneChange::Apply(Board& board)
+{
+    board.SetLastPosition(m_newPosition);
+}
+
+void LastStoneChange::Revert(Board& board)
+{
+    board.SetLastPosition(m_oldPosition);
 }

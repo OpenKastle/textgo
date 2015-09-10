@@ -151,6 +151,7 @@ void Game::Start()
                     {
                         auto historyAction = std::make_unique<CompositeAction>();
                         historyAction->AddAction(std::make_unique<AddAction>(position, stone, previousLastPosition));
+                        historyAction->AddAction(std::make_unique<LastStoneChange>(boardCopy.GetLastPosition(), position));
 
                         Stone oppositeStone = (stone == Stone::Black) ? Stone::White : Stone::Black;
                         std::vector<Position> adjacentOpponents = GetAdjacentSpaces(boardCopy, position, oppositeStone);
@@ -173,9 +174,9 @@ void Game::Start()
                         if (GetGroupLiberties(boardCopy, position) != 0)
                         {
                             Board boardKoCopy = boardCopy;
-                            if (m_history.size() >= 2)
+                            if (m_historyIndex != 0)
                             {
-                                m_history[m_history.size() - 1]->Revert(boardKoCopy);
+                                m_history[m_historyIndex - 1]->Revert(boardKoCopy);
 
                                 if (boardKoCopy == boardCopy)
                                 {
