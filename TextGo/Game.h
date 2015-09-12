@@ -34,6 +34,8 @@ private:
 
     Board m_board;
     Stone m_turn = Stone::Black;
+    
+    std::string m_failureCondition;
 
     std::vector<std::unique_ptr<AbstractAction>> m_history;
     unsigned int m_historyIndex = 0;

@@ -103,6 +103,12 @@ void Game::Start()
             system("cls");
             m_board.Print();
 
+            SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+            std::cout << "\n" << m_failureCondition << "\n";
+            SetConsoleTextAttribute(hConsole, savedAttributes);
+
+            m_failureCondition = "";
+
             std::string turnString = (m_turn == Stone::Black) ? "black" : "white";
 
             SetConsoleTextAttribute(hConsole, savedAttributes);
@@ -199,8 +205,24 @@ void Game::Start()
                                 action->Apply(m_board);                    
                                 AddHistory(std::move(action));
                             }
+                            else
+                            {
+                                m_failureCondition = "KO";
+                            }
+                        }
+                        else
+                        {
+                            m_failureCondition = "SUICIDE";
                         }
                     }
+                    else
+                    {
+                        m_failureCondition = "SPACE OCCUPIED";
+                    }
+                }
+                else
+                {
+                    m_failureCondition = "INVALID BOARD POSITION";
                 }
             }
         }
