@@ -23,10 +23,9 @@ void CompositeAction::Revert(Board& board)
     }
 }
 
-AddAction::AddAction(Position position, Stone stone, Position previousLastPosition)
+AddAction::AddAction(Position position, Stone stone)
     : m_position(position),
-      m_stone(stone),
-      m_previousLastPosition(previousLastPosition)
+      m_stone(stone)
 {
 }
 

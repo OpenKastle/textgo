@@ -35,7 +35,7 @@ class AddAction : public AbstractAction
 public:
     virtual ~AddAction() {}
 
-    AddAction(Position position, Stone stone, Position previousLastPosition);
+    AddAction(Position position, Stone stone);
 
     virtual void Apply(Board& board) override;
     virtual void Revert(Board& board) override;
@@ -43,8 +43,6 @@ public:
 private:
     Position m_position;
     Stone m_stone = Stone::Black;
-    
-    Position m_previousLastPosition;
 };
 
 class RemoveAction : public AbstractAction
