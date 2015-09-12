@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actions.h" />
+    <ClInclude Include="Arguments.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="ColorSchemes.h" />
     <ClInclude Include="Game.h" />
@@ -73,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actions.cpp" />
+    <ClCompile Include="Arguments.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="ColorSchemes.cpp" />
     <ClCompile Include="Game.cpp" />
