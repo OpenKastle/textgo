@@ -87,3 +87,18 @@ public:
     virtual void Apply(Board&) override {}
     virtual void Revert(Board&) override {}
 };
+
+class CaptureAction : public AbstractAction
+{
+public:
+    virtual ~CaptureAction() {}
+
+    CaptureAction(Stone color, unsigned int captures);
+
+    virtual void Apply(Board& board) override;
+    virtual void Revert(Board& board) override;
+
+private:
+    Stone m_color = Stone::Black;
+    unsigned int m_captures = 0;
+};

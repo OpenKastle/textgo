@@ -31,17 +31,12 @@ Board& Board::operator=(const Board& other)
     return *this;
 }
 
-bool Board::Add(Position position, Stone stone, bool recordLast)
+bool Board::Add(Position position, Stone stone)
 {
     auto find = m_stones.find(position);
     if (find == end(m_stones))
     {
         m_stones[position] = stone;
-
-        if (recordLast)
-        {
-            m_lastPosition = position;
-        }
 
         return true;
     }
@@ -116,6 +111,9 @@ void Board::Print() const
     }
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD savedAttributes = consoleInfo.wAttributes;
 
     std::map<unsigned int, WORD> sections = GetBoardTextSections();
     for (auto iter = begin(sections); iter != end(sections); ++iter)
@@ -133,6 +131,23 @@ void Board::Print() const
             std::cout << board.substr(iter->first);
         }
     }
+
+    SetConsoleTextAttribute(hConsole, savedAttributes);
+    std::cout << "\n";
+    std::cout << "Captured ";
+
+    SetConsoleTextAttribute(hConsole, m_colorScheme->GetBlackStoneAttributes());
+    std::cout << "(O)";
+
+    SetConsoleTextAttribute(hConsole, savedAttributes);
+    std::cout << ": " << m_capturedBlackStones << "\n";
+    std::cout << "Captured ";
+
+    SetConsoleTextAttribute(hConsole, m_colorScheme->GetWhiteStoneAttributes());
+    std::cout << "(O)";
+
+    SetConsoleTextAttribute(hConsole, savedAttributes);
+    std::cout << ": " << m_capturedWhiteStones << "\n";
 }
 
 unsigned int Board::GetStoneStringPosition(Position position) const
@@ -186,6 +201,36 @@ Stone Board::GetStoneAt(Position position) const
 void Board::SetLastPosition(Position position)
 {
     m_lastPosition = position;
+}
+
+void Board::AddCapturedStones(Stone color, unsigned int captures)
+{
+    if (color == Stone::Black)
+    {
+        m_capturedBlackStones += captures;
+    }
+    else if (color == Stone::White)
+    {
+        m_capturedWhiteStones += captures;
+    }
+}
+
+void Board::SubtractCapturedStones(Stone color, unsigned int captures)
+{
+    if (color == Stone::Black)
+    {
+        if (captures >= m_capturedBlackStones)
+        {
+            m_capturedBlackStones -= captures;
+        }
+    }
+    else if (color == Stone::White)
+    {
+        if (captures >= m_capturedWhiteStones)
+        {
+            m_capturedWhiteStones -= captures;
+        }
+    }
 }
 
 bool Board::operator==(const Board& other) const

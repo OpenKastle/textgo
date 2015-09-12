@@ -16,71 +16,71 @@ Game::Game(Handicap handicap)
 {
     if (handicap == Handicap::Two)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
     }
     else if (handicap == Handicap::Three)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
-        m_board.Add(Position("q4"),  Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
+        m_board.Add(Position("q4"),  Stone::Black);
     }
     else if (handicap == Handicap::Four)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
-        m_board.Add(Position("q4"),  Stone::Black, false);
-        m_board.Add(Position("d16"), Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
+        m_board.Add(Position("q4"),  Stone::Black);
+        m_board.Add(Position("d16"), Stone::Black);
     }
     else if (handicap == Handicap::Five)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
-        m_board.Add(Position("q4"),  Stone::Black, false);
-        m_board.Add(Position("d16"), Stone::Black, false);
-        m_board.Add(Position("k10"), Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
+        m_board.Add(Position("q4"),  Stone::Black);
+        m_board.Add(Position("d16"), Stone::Black);
+        m_board.Add(Position("k10"), Stone::Black);
     }
     else if (handicap == Handicap::Six)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
-        m_board.Add(Position("q4"),  Stone::Black, false);
-        m_board.Add(Position("d16"), Stone::Black, false);
-        m_board.Add(Position("d10"), Stone::Black, false);
-        m_board.Add(Position("q10"), Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
+        m_board.Add(Position("q4"),  Stone::Black);
+        m_board.Add(Position("d16"), Stone::Black);
+        m_board.Add(Position("d10"), Stone::Black);
+        m_board.Add(Position("q10"), Stone::Black);
     }
     else if (handicap == Handicap::Seven)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
-        m_board.Add(Position("q4"),  Stone::Black, false);
-        m_board.Add(Position("d16"), Stone::Black, false);
-        m_board.Add(Position("d10"), Stone::Black, false);
-        m_board.Add(Position("q10"), Stone::Black, false);
-        m_board.Add(Position("k10"), Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
+        m_board.Add(Position("q4"),  Stone::Black);
+        m_board.Add(Position("d16"), Stone::Black);
+        m_board.Add(Position("d10"), Stone::Black);
+        m_board.Add(Position("q10"), Stone::Black);
+        m_board.Add(Position("k10"), Stone::Black);
     }
     else if (handicap == Handicap::Eight)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
-        m_board.Add(Position("q4"),  Stone::Black, false);
-        m_board.Add(Position("d16"), Stone::Black, false);
-        m_board.Add(Position("d10"), Stone::Black, false);
-        m_board.Add(Position("q10"), Stone::Black, false);
-        m_board.Add(Position("k4"),  Stone::Black, false);
-        m_board.Add(Position("k16"), Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
+        m_board.Add(Position("q4"),  Stone::Black);
+        m_board.Add(Position("d16"), Stone::Black);
+        m_board.Add(Position("d10"), Stone::Black);
+        m_board.Add(Position("q10"), Stone::Black);
+        m_board.Add(Position("k4"),  Stone::Black);
+        m_board.Add(Position("k16"), Stone::Black);
     }
     else if (handicap == Handicap::Nine)
     {
-        m_board.Add(Position("d4"),  Stone::Black, false);
-        m_board.Add(Position("q16"), Stone::Black, false);
-        m_board.Add(Position("q4"),  Stone::Black, false);
-        m_board.Add(Position("d16"), Stone::Black, false);
-        m_board.Add(Position("d10"), Stone::Black, false);
-        m_board.Add(Position("q10"), Stone::Black, false);
-        m_board.Add(Position("k4"),  Stone::Black, false);
-        m_board.Add(Position("k16"), Stone::Black, false);
-        m_board.Add(Position("k10"), Stone::Black, false);
+        m_board.Add(Position("d4"),  Stone::Black);
+        m_board.Add(Position("q16"), Stone::Black);
+        m_board.Add(Position("q4"),  Stone::Black);
+        m_board.Add(Position("d16"), Stone::Black);
+        m_board.Add(Position("d10"), Stone::Black);
+        m_board.Add(Position("q10"), Stone::Black);
+        m_board.Add(Position("k4"),  Stone::Black);
+        m_board.Add(Position("k16"), Stone::Black);
+        m_board.Add(Position("k10"), Stone::Black);
     }
 
     m_turn = Stone::White;
@@ -94,11 +94,11 @@ void Game::Start()
         while (!valid)
         {
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+            
             CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-            WORD savedAttributes;
-
             GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-            savedAttributes = consoleInfo.wAttributes;
+
+            WORD savedAttributes = consoleInfo.wAttributes;
 
             system("cls");
             m_board.Print();
@@ -147,11 +147,13 @@ void Game::Start()
                 
                     Board boardCopy = m_board;
 
-                    if (boardCopy.Add(Position(position), stone, true))
+                    if (boardCopy.Add(Position(position), stone))
                     {
-                        auto historyAction = std::make_unique<CompositeAction>();
-                        historyAction->AddAction(std::make_unique<AddAction>(position, stone, previousLastPosition));
-                        historyAction->AddAction(std::make_unique<LastStoneChange>(boardCopy.GetLastPosition(), position));
+                        auto action = std::make_unique<CompositeAction>();
+                        action->AddAction(std::make_unique<AddAction>(position, stone, previousLastPosition));
+                        action->AddAction(std::make_unique<LastStoneChange>(boardCopy.GetLastPosition(), position));
+
+                        boardCopy.SetLastPosition(position);
 
                         Stone oppositeStone = (stone == Stone::Black) ? Stone::White : Stone::Black;
                         std::vector<Position> adjacentOpponents = GetAdjacentSpaces(boardCopy, position, oppositeStone);
@@ -163,8 +165,13 @@ void Game::Start()
                                 std::vector<Position> group = GetGroup(boardCopy, adjacentOpponentPosition);
                                 for (const Position& groupPosition : group)
                                 {
-                                    historyAction->AddAction(std::make_unique<RemoveAction>(groupPosition, boardCopy.GetStoneAt(groupPosition)));
+                                    action->AddAction(std::make_unique<RemoveAction>(groupPosition, boardCopy.GetStoneAt(groupPosition)));
                                     boardCopy.Remove(groupPosition);
+                                }
+
+                                if (!group.empty())
+                                {
+                                    action->AddAction(std::make_unique<CaptureAction>(oppositeStone, group.size()));
                                 }
                             }
                         }
@@ -173,7 +180,7 @@ void Game::Start()
 
                         if (GetGroupLiberties(boardCopy, position) != 0)
                         {
-                            Board boardKoCopy = boardCopy;
+                            Board boardKoCopy = m_board;
                             if (m_historyIndex != 0)
                             {
                                 m_history[m_historyIndex - 1]->Revert(boardKoCopy);
@@ -189,9 +196,8 @@ void Game::Start()
                                 valid = true;
                                 m_turn = (m_turn == Stone::Black) ? Stone::White : Stone::Black;
 
-                                m_board = boardCopy;
-                    
-                                AddHistory(std::move(historyAction));
+                                action->Apply(m_board);                    
+                                AddHistory(std::move(action));
                             }
                         }
                     }

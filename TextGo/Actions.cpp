@@ -32,7 +32,7 @@ AddAction::AddAction(Position position, Stone stone, Position previousLastPositi
 
 void AddAction::Apply(Board& board)
 {
-    board.Add(m_position, m_stone, true);
+    board.Add(m_position, m_stone);
 }
 
 void AddAction::Revert(Board& board)
@@ -53,7 +53,7 @@ void RemoveAction::Apply(Board& board)
 
 void RemoveAction::Revert(Board& board)
 {
-    board.Add(m_position, m_stone, false);
+    board.Add(m_position, m_stone);
 }
 
 LastStoneChange::LastStoneChange(Position oldPosition, Position newPosition)
@@ -70,4 +70,20 @@ void LastStoneChange::Apply(Board& board)
 void LastStoneChange::Revert(Board& board)
 {
     board.SetLastPosition(m_oldPosition);
+}
+
+CaptureAction::CaptureAction(Stone color, unsigned int captures)
+    : m_color(color),
+      m_captures(captures)
+{
+}
+
+void CaptureAction::Apply(Board& board)
+{
+    board.AddCapturedStones(m_color, m_captures);
+}
+
+void CaptureAction::Revert(Board& board)
+{
+    board.SubtractCapturedStones(m_color, m_captures);
 }

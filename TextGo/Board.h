@@ -16,7 +16,7 @@ public:
     Board& operator=(const Board& other);
     ~Board() = default;
 
-    bool Add(Position position, Stone stone, bool recordLast);
+    bool Add(Position position, Stone stone);
     void Remove(Position position);
     void Print() const;
 
@@ -24,6 +24,9 @@ public:
 
     Position GetLastPosition() const { return m_lastPosition; }
     void SetLastPosition(Position position);
+
+    void AddCapturedStones(Stone color, unsigned int captures);
+    void SubtractCapturedStones(Stone color, unsigned int captures);
 
     bool operator==(const Board& other) const;
 
@@ -33,6 +36,9 @@ private:
 
     std::map<Position, Stone> m_stones;
     Position m_lastPosition;
+
+    unsigned int m_capturedBlackStones = 0;
+    unsigned int m_capturedWhiteStones = 0;
 
     std::unique_ptr<ColorScheme> m_colorScheme;
 };
