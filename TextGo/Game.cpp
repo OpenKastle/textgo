@@ -156,7 +156,7 @@ void Game::Start()
                     if (boardCopy.Add(Position(position), stone))
                     {
                         auto action = std::make_unique<CompositeAction>();
-                        action->AddAction(std::make_unique<AddAction>(position, stone, previousLastPosition));
+                        action->AddAction(std::make_unique<AddAction>(position, stone));
                         action->AddAction(std::make_unique<LastStoneChange>(boardCopy.GetLastPosition(), position));
 
                         boardCopy.SetLastPosition(position);
